@@ -330,6 +330,7 @@ impl KVMVcpu {
                     return Ok(());
                 }
 
+                defer!(SHARE_SPACE.scheduler.WakeAll());
                 match KERNEL_IO_THREAD.Wait(&SHARE_SPACE) {
                     Ok(()) => (),
                     Err(Error::Exit) => {
@@ -342,7 +343,7 @@ impl KVMVcpu {
                     Err(e) => {
                         panic!("KERNEL_IO_THREAD get error {:?}", e);
                     }
-                };
+                }
             }
             qlib::HYPERCALL_RELEASE_VCPU => {
                 SyncMgr::WakeShareSpaceReady();
