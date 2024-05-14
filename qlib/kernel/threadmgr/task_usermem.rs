@@ -533,6 +533,18 @@ impl MemoryManager {
     }
 
     pub fn Memcpy(dst: u64, src: u64, count: usize) {
+        #[cfg(feature="building_qkernel")]{
+            use crate::kernel_def::*;
+            let ua = enable_access_user();
+            unsafe {
+                let dstPtr = dst as *mut u8;
+                let srcPtr = src as *const u8;
+                debug!("VM: Memcpy - from:{:#x}; to:{:#x}.", src, dst);
+                core::ptr::copy_nonoverlapping(srcPtr, dstPtr, count);
+            }
+            set_access_user(ua);
+            return;
+        }
         unsafe {
             let dstPtr = dst as *mut u8;
             let srcPtr = src as *const u8;

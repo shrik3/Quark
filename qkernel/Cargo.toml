@@ -51,3 +51,7 @@ overflow-checks = false
 lto = true
 codegen-units = 1
 debug-assertions = false
+
+[features]
+default = ["building_qkernel"]
+building_qkernel = []
