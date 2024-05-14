@@ -264,7 +264,6 @@ impl VirtualMachine {
             VMS.lock().cpuAffinit = true;
         }
 
-
         match args.Spec.annotations.get(SANDBOX_UID_NAME) {
             None => (),
             Some(podUid) => {
@@ -272,7 +271,8 @@ impl VirtualMachine {
             }
         }
 
-        let cpuCount = cpuCount.max(2); // minimal 2 cpus
+        // let cpuCount = cpuCount.max(2); // minimal 2 cpus
+        let cpuCount = 3;
 
         VMS.lock().vcpuCount = cpuCount;
         VMS.lock().RandomVcpuMapping();

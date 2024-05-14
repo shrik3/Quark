@@ -21,6 +21,8 @@ VDSO            = vdso/vdso.so
 ARCH := ${shell uname -m}
 RUST_TOOLCHAIN  = nightly-2023-12-11-$(ARCH)-unknown-linux-gnu
 
+RFLAGS   = -C target-cpu=neoverse-n1
+RFLAGS_D = $(RFLAGS) -C force-frame-pointers=yes
 
 .PHONY: all release debug clean install qvisor_release qvisor_debug cuda_make cuda_all cleanall
 
@@ -42,9 +44,7 @@ qvisor_debug:
 	make -C ./qvisor TOOLCHAIN=$(RUST_TOOLCHAIN) debug
 
 qkernel_debug:
-	make -C ./qkernel TOOLCHAIN=$(RUST_TOOLCHAIN) debug
-
-$(VDSO):
+	RUSTFLAGS="$(RFLAGS_D)" make -C ./qkernel TOOLCHAIN=$(RUST_TOOLCHAIN) debug
 	make -C ./vdso
 
 clean:
@@ -59,8 +59,6 @@ cleanall: clean
 
 docker:
 	sudo systemctl restart docker
-
-cuda_release:: qvisor_cuda_release qkernel_release cuda_make
 
 cuda_debug:: qvisor_cuda_debug qkernel_debug cuda_make
 
