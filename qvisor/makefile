@@ -1,10 +1,10 @@
 .PHONY: debug release cuda_debug cuda_release
 
 debug:
-	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build
+	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build -j $(shell nproc)
 
 release:
-	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --release
+	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build -j $(shell nproc) --release
 
 cuda_debug:
 	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --features cuda

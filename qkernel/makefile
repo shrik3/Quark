@@ -25,10 +25,10 @@ $(kernel_debug): kernel_debug $(assembly_object_files)
 		$(assembly_object_files) $(qkernel_debug)
 
 kernel:
-	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --target $(arch)-qkernel.json --release
+	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --target $(arch)-qkernel.json -j $(shell nproc) --release
 
 kernel_debug:
-	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --target $(arch)-qkernel.json
+	CARGO_TARGET_DIR=../target cargo +$(TOOLCHAIN) build --target $(arch)-qkernel.json -j $(shell nproc)
 
 ../build/arch/$(arch)/%.o: src/qlib/kernel/arch/$(arch)/%.s
 	@mkdir -p $(shell dirname $@)
